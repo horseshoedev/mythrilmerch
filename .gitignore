@@ -1,0 +1,231 @@
+
+# Operating System Files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+.Spotlight-V100
+.Trashes
+desktop.ini
+$RECYCLE.BIN/
+
+# IDE and Editor Files
+.idea/
+.vscode/
+*.swp
+*.bak
+*.swo
+*~
+.project
+.classpath
+.settings/
+*.sublime-project
+*.sublime-workspace
+.komodoproject
+.buildpath
+
+# Build Artifacts
+build/
+dist/
+bin/
+target/
+*.log
+*.tmp
+*.temp
+tmp/
+temp/
+logs/
+output/
+reports/
+
+# Dependencies
+node_modules/
+bower_components/
+vendor/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+jspm_packages/
+composer.lock
+Gemfile.lock
+package-lock.json
+Cargo.lock
+
+# Compiled Go Binaries
+*.exe
+*.dll
+*.so
+*.dylib
+*.rpm
+*.deb
+*.apk
+*.ipa
+*.app
+
+# Python
+__pycache__/
+*.pyc
+*.pyd
+.Python
+env/
+venv/
+pip-log.txt
+pip-delete-this-directory/
+.tox/
+.coverage
+.pytest_cache/
+htmlcov/
+.mypy_cache/
+.pytype/
+sitecustomize.py
+celerybeat-schedule
+.pytest_cache
+
+# Java
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+*.zip
+*.tar.gz
+hs_err_pid*.log
+.settings/
+.project
+.classpath
+target/
+bin/
+
+# Ruby
+.bundle/
+.byebug_history
+.rvm/
+.ruby-version
+pkg/
+spec/reports/
+test/reports/
+vendor/bundle/
+capybara-screenshot/
+tmp/
+*.rbc
+*.sass-cache/
+
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+.env
+.env.*
+.next/ # Next.js build output
+out/ # Gatsby build output
+public/ # Often contains build output for frontend frameworks
+
+# PHP
+vendor/
+composer.phar
+composer.lock
+.env
+.env.example
+storage/*.key
+/public/hot
+/public/storage
+/bootstrap/cache/*.php
+/build/
+
+# macOS Specific
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows Specific
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+System Volume Information/
+
+# Visual Studio / .NET
+[Bb]in/
+[Oo]bj/
+*.pdb
+*.user
+*.suo
+*.nxo
+*.log
+[Dd]ebug/
+[Rr]elease/
+ReSharper/
+*.resharper
+[Tt]est[Rr]esults/
+_ReSharper*/
+[Bb]uild[Ss]erver/
+[Dd]eploy/
+[Ll]ogs/
+[Aa]rtifacts/
+_UpgradeReport_Files/
+App_Data/
+packages/
+Web.config.user
+*.publishsettings
+
+# Android
+.gradle/
+/local.properties
+/captures/
+.externalNativeBuild/
+build/
+*.iml
+
+# Xcode
+build/
+.DS_Store
+*.pbxuser
+*.xcuserdatad/
+DerivedData/
+*.xcworkspace
+!default.xcworkspace
+Profile/
+
+# Vagrant
+.vagrant/
+
+# Terraform
+.terraform/
+*.tfplan
+*.tfstate
+*.tfstate.backup
+
+# Docker
+Dockerfile.orig
+docker-compose.override.yml
+
+# Kubernetes
+*.kubeconfig
+
+# Serverless
+.serverless/
+.webpack/
+
+# Environment Variables
+.env
+.env.local
+.env.dev
+.env.production
+.env.staging
+
+# Thumbnails
+.thumbnails/
+
+# Backup Files
+*.bak
+*.tmp
+*~
+*.swp
+
+# Miscellaneous
+*.log
+*.stackdump
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log
