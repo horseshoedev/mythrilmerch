@@ -61,6 +61,7 @@ def get_products():
             print("Database connection closed")
     return jsonify(products)
 
+# test
 # Simple API endpoint for adding to cart (in-memory for this demo)
 # In a real application, this would involve user sessions and a database cart.
 cart_items = [] # This will reset every time the server restarts
