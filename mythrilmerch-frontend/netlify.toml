@@ -1,0 +1,13 @@
+# mythrilmerch-frontend/netlify.toml
+
+[build]
+  command = "npm run build"
+  publish = "build" # This is where your React app's built files will be
+
+[functions]
+  # This tells Netlify to look for functions in this directory
+  directory = "netlify/functions"
+  # Specify the Python runtime version. Make sure this matches a version
+  # supported by Netlify's build environment and your local development.
+  # Common choices are "python3.9", "python3.10", "python3.11".
+  python_version = "python3.9" # <--- ADJUST THIS if you use a different Python version

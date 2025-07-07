@@ -1,0 +1,4 @@
+# mythrilmerch-frontend/netlify/functions/api/requirements.txt
+Flask
+Flask-Cors
+psycopg2-binary
