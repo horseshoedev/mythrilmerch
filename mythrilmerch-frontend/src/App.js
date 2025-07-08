@@ -9,7 +9,7 @@
       // State for displaying messages to the user (e.g., "Added to cart!")
       const [message, setMessage] = useState('');
       // Base URL for our Flask backend API
-      const API_BASE_URL = 'http://127.0.0.1:5000/api';
+      const API_BASE_URL = '/.netlify/functions/api';
 
       // useEffect hook to fetch products when the component mounts
       useEffect(() => {
