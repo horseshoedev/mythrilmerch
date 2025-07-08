@@ -10,4 +10,5 @@
   # Specify the Python runtime version. Make sure this matches a version
   # supported by Netlify's build environment and your local development.
   # Common choices are "python3.9", "python3.10", "python3.11".
-  python_version = "python3.9" # <--- ADJUST THIS if you use a different Python version
+  [functions.python] 
+    python_version = "python3.9" 
