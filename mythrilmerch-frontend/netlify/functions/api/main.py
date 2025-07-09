@@ -188,3 +188,7 @@ def update_cart_item(cart_item_id):
     finally:
         if conn:
             conn.close()
+
+# This is the handler function that Netlify will invoke
+def handler(event, context):
+    return handle_request(app, event, context)
