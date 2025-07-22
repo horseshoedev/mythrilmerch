@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import Header from './components/Header';
+import './App.css'; // Assuming you still have App.css, though Tailwind reduces its necessity
+
 
 // Main App component
 const App = () => {
