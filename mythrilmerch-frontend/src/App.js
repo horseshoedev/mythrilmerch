@@ -103,10 +103,6 @@ const App = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 font-sans text-gray-800 p-4 sm:p-6 lg:p-8 rounded-lg shadow-lg">
-      {/* Header */}
-      {/* Header */}
-      {/* Replace the custom header with the imported Header component */}
-      <Header /> {/* This is the change */}
 
       <main className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Product List Section */}
