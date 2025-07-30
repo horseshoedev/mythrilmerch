@@ -104,6 +104,13 @@ const App = () => {
   return (
     <div className="min-h-screen bg-gray-100 font-sans text-gray-800 p-4 sm:p-6 lg:p-8 rounded-lg shadow-lg">
 
+      {/* Message Display */}
+      {message && (
+        <div className="mb-4 p-4 bg-blue-100 border border-blue-400 text-blue-700 rounded-lg">
+          {message}
+        </div>
+      )}
+
       <main className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Product List Section */}
         <section className="lg:col-span-2 bg-white p-6 rounded-lg shadow-md">
