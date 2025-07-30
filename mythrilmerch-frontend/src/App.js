@@ -170,9 +170,9 @@ const App = () => {
       {/* Footer */}
       <footer className="mt-8 text-center text-gray-600 text-sm">
         <p>&copy; Mythril Merch {new Date().getFullYear()}. All rights reserved.</p>
-        <p>It's dangerous to go alone. Take <a href="#" target="_blank" rel="noopener noreferrer">
-          <img src="/Its-Dangerous-to-Go-Alone-Take-This.png" alt="secret zelda heart image" className="inline-block w-6 h-6" />
-        </a> this.</p>
+        <p>It's dangerous to go alone. Take <button className="inline-flex items-center bg-transparent border-none p-0 cursor-pointer hover:opacity-80">
+          <img src="/Its-Dangerous-to-Go-Alone-Take-This.png" alt="secret zelda heart" className="inline-block w-6 h-6" />
+        </button> this.</p>
       </footer>
     </div>
   );
