@@ -2,7 +2,7 @@ import React from 'react';
 
 function Header() {
   return (
-    <header className="bg-amazon_blue text-white p-4 flex items-center justify-between">
+    <header className="bg-amazonBlue text-white p-4 flex items-center justify-between">
       {/* Logo */}
       <div className="flex items-center">
         <img

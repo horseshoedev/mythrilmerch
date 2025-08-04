@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-//import Header from './components/Header';
+import Header from './components/Header';
 import './App.css'; // Assuming you still have App.css, though Tailwind reduces its necessity
 
 
@@ -12,7 +12,7 @@ const App = () => {
   // State for displaying messages to the user (e.g., "Added to cart!")
   const [message, setMessage] = useState('');
   // Base URL for our Flask backend API
-  const API_BASE_URL = '/.netlify/functions/api'; // Updated API_BASE_URL
+  const API_BASE_URL = 'http://localhost:5000'; // Local development API
 
   // useEffect hook to fetch products when the component mounts
   useEffect(() => {
@@ -102,7 +102,9 @@ const App = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 font-sans text-gray-800 p-4 sm:p-6 lg:p-8 rounded-lg shadow-lg">
+    <div className="min-h-screen bg-gray-100 font-sans text-gray-800">
+      <Header />
+      <div className="p-4 sm:p-6 lg:p-8 rounded-lg shadow-lg">
 
       {/* Message Display */}
       {message && (
@@ -170,10 +172,12 @@ const App = () => {
       {/* Footer */}
       <footer className="mt-8 text-center text-gray-600 text-sm">
         <p>&copy; Mythril Merch {new Date().getFullYear()}. All rights reserved.</p>
-        <p>It's dangerous to go alone. Take <button className="inline-flex items-center bg-transparent border-none p-0 cursor-pointer hover:opacity-80">
+        {/* Secret goes here */}
+        {/* <p>It's dangerous to go alone. Take <button className="inline-flex items-center bg-transparent border-none p-0 cursor-pointer hover:opacity-80">
           <img src="/Its-Dangerous-to-Go-Alone-Take-This.png" alt="secret zelda heart" className="inline-block w-6 h-6" />
-        </button> this.</p>
+        </button> this.</p> */}
       </footer>
+      </div>
     </div>
   );
 };

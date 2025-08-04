@@ -1,9 +1,14 @@
+#!/usr/bin/env python3
+"""
+Local Flask API server for MythrilMerch development
+This allows you to test the API locally without Netlify functions
+"""
+
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import psycopg2
 from psycopg2 import Error
 import os
-from netlify_functions_wsgi import handle_request
 
 app = Flask(__name__)
 CORS(app)
@@ -23,7 +28,7 @@ def get_db_connection():
     return conn
 
 # API Endpoint to get all products
-@app.route('/products', methods=['GET']) # CHANGED: Removed /api prefix
+@app.route('/products', methods=['GET'])
 def get_products():
     conn = get_db_connection()
     if conn is None:
@@ -52,8 +57,8 @@ def get_products():
             print("Database connection closed")
     return jsonify(products)
 
-# API endpoint to add a product to the cart (now persistent in DB)
-@app.route('/cart/add', methods=['POST']) # CHANGED: Removed /api prefix
+# API endpoint to add a product to the cart
+@app.route('/cart/add', methods=['POST'])
 def add_to_cart():
     data = request.get_json()
     product_id = data.get('productId')
@@ -92,8 +97,8 @@ def add_to_cart():
         if conn:
             conn.close()
 
-# API endpoint to get all items in the cart (now fetched from DB)
-@app.route('/cart', methods=['GET']) # CHANGED: Removed /api prefix
+# API endpoint to get all items in the cart
+@app.route('/cart', methods=['GET'])
 def get_cart():
     conn = get_db_connection()
     if conn is None:
@@ -136,60 +141,9 @@ def get_cart():
             conn.close()
     return jsonify(cart_items)
 
-# API endpoint to remove an item from the cart
-@app.route('/cart/remove/<int:cart_item_id>', methods=['DELETE']) # CHANGED: Removed /api prefix
-def remove_from_cart(cart_item_id):
-    conn = get_db_connection()
-    if conn is None:
-        return jsonify({"error": "Database connection failed"}), 500
-
-    try:
-        cur = conn.cursor()
-        cur.execute("DELETE FROM cart_items WHERE id = %s;", (cart_item_id,))
-        if cur.rowcount == 0:
-            conn.rollback()
-            return jsonify({"message": "Cart item not found"}), 404
-        conn.commit()
-        cur.close()
-        return jsonify({"message": "Cart item removed successfully"}), 200
-    except Error as e:
-        conn.rollback()
-        print(f"Error removing cart item: {e}")
-        return jsonify({"error": "Error removing cart item"}), 500
-    finally:
-        if conn:
-            conn.close()
-
-# API endpoint to update the quantity of a cart item
-@app.route('/cart/update/<int:cart_item_id>', methods=['PUT']) # CHANGED: Removed /api prefix
-def update_cart_item(cart_item_id):
-    data = request.get_json()
-    new_quantity = data.get('quantity')
-
-    if not isinstance(new_quantity, int) or new_quantity <= 0:
-        return jsonify({"error": "Quantity must be a positive integer"}), 400
-
-    conn = get_db_connection()
-    if conn is None:
-        return jsonify({"error": "Database connection failed"}), 500
-
-    try:
-        cur = conn.cursor()
-        cur.execute("UPDATE cart_items SET quantity = %s WHERE id = %s;", (new_quantity, cart_item_id))
-        if cur.rowcount == 0:
-            conn.rollback()
-            return jsonify({"message": "Cart item not found"}), 404
-        conn.commit()
-        cur.close()
-        return jsonify({"message": "Cart item updated successfully"}), 200
-    except Error as e:
-        conn.rollback()
-        print(f"Error updating cart item: {e}")
-        return jsonify({"error": "Error updating cart item"}), 500
-    finally:
-        if conn:
-            conn.close()
-
-# This is the handler function that Netlify will invoke
-def handler(event, context):
-    return handle_request(app, event, context)
+if __name__ == '__main__':
+    print("🚀 Starting local MythrilMerch API server...")
+    print("📡 API will be available at: http://localhost:5000")
+    print("🔗 Products endpoint: http://localhost:5000/products")
+    print("🛒 Cart endpoint: http://localhost:5000/cart")
+    app.run(debug=False, host='0.0.0.0', port=5000) 
