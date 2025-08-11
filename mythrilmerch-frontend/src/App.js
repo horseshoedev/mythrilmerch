@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Header from './components/Header';
-import './App.css'; // Assuming you still have App.css, though Tailwind reduces its necessity
-
+import './App.css';
 
 // Main App component
 const App = () => {
@@ -11,80 +10,85 @@ const App = () => {
   const [cart, setCart] = useState([]);
   // State for displaying messages to the user (e.g., "Added to cart!")
   const [message, setMessage] = useState('');
-  // Base URL for our Flask backend API
-  const API_BASE_URL = 'http://localhost:5000'; // Local development API
+  // Loading states
+  const [isLoadingProducts, setIsLoadingProducts] = useState(true);
+  const [isLoadingCart, setIsLoadingCart] = useState(true);
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
+  // Base URL for our Flask backend API - use environment variable with fallback
+  const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
+  // Function to fetch products from the Flask backend
+  const fetchProducts = useCallback(async () => {
+    try {
+      setIsLoadingProducts(true);
+      const response = await fetch(`${API_BASE_URL}/products`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setProducts(data);
+    } catch (error) {
+      console.error("Failed to fetch products:", error);
+      setMessage("Failed to load products. Please check the backend server.");
+    } finally {
+      setIsLoadingProducts(false);
+    }
+  }, [API_BASE_URL]);
+
+  // Function to fetch cart items from the backend
+  const fetchCartItems = useCallback(async () => {
+    try {
+      setIsLoadingCart(true);
+      const response = await fetch(`${API_BASE_URL}/cart`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setCart(data);
+    } catch (error) {
+      console.error("Failed to fetch cart items:", error);
+      setMessage("Failed to load cart. Please check the backend server.");
+    } finally {
+      setIsLoadingCart(false);
+    }
+  }, [API_BASE_URL]);
 
   // useEffect hook to fetch products when the component mounts
   useEffect(() => {
-    // Function to fetch products from the Flask backend
-    const fetchProducts = async () => {
-      try {
-        const response = await fetch(`${API_BASE_URL}/products`);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        setProducts(data); // Update the products state with fetched data
-      } catch (error) {
-        console.error("Failed to fetch products:", error);
-        setMessage("Failed to load products. Please check the backend server.");
-      }
-    };
-
-    // Function to fetch cart items from the backend
-    const fetchCartItems = async () => {
-      try {
-        const response = await fetch(`${API_BASE_URL}/cart`);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        setCart(data); // Update the cart state with fetched data
-      } catch (error) {
-        console.error("Failed to fetch cart items:", error);
-        setMessage("Failed to load cart. Please check the backend server.");
-      }
-    };
-
-
-    fetchProducts(); // Call the fetch products function
-    fetchCartItems(); // Call the fetch cart items function on mount as well
-  }, []); // Empty dependency array means this runs once on mount
+    fetchProducts();
+    fetchCartItems();
+  }, [fetchProducts, fetchCartItems]);
 
   // Function to add a product to the cart
   const addToCart = async (productId) => {
     try {
+      setIsAddingToCart(true);
       const response = await fetch(`${API_BASE_URL}/cart/add`, {
-        method: 'POST', // Use POST method for adding data
+        method: 'POST',
         headers: {
-          'Content-Type': 'application/json', // Specify content type as JSON
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ productId: productId, quantity: 1 }), // Send product ID and quantity
+        body: JSON.stringify({ productId: productId, quantity: 1 }),
       });
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      // No need to use the 'data' variable directly here if the backend doesn't return the full cart.
-      // Instead, we will re-fetch the cart to ensure consistency with the database.
-      // const data = await response.json(); // Original Line 49
-
       // Re-fetch cart to ensure consistency with database after adding an item
-      const cartResponse = await fetch(`${API_BASE_URL}/cart`);
-      if (!cartResponse.ok) {
-          throw new Error(`HTTP error! status: ${cartResponse.status}`);
-      }
-      const updatedCartData = await cartResponse.json();
-      setCart(updatedCartData); // Update cart state with the fresh data from the backend
+      await fetchCartItems();
 
-      setMessage('Product added to cart!'); // Show success message
+      setMessage('Product added to cart!');
       // Clear message after a short delay
-      setTimeout(() => setMessage(''), 2000);
+      const timeoutId = setTimeout(() => setMessage(''), 2000);
+      return () => clearTimeout(timeoutId);
     } catch (error) {
       console.error("Failed to add to cart:", error);
       setMessage("Failed to add product to cart.");
-      setTimeout(() => setMessage(''), 3000);
+      const timeoutId = setTimeout(() => setMessage(''), 3000);
+      return () => clearTimeout(timeoutId);
+    } finally {
+      setIsAddingToCart(false);
     }
   };
 
@@ -101,14 +105,19 @@ const App = () => {
     }, 0);
   };
 
+  // Calculate total number of items in cart
+  const getCartItemCount = () => {
+    return cart.reduce((total, item) => total + item.quantity, 0);
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 font-sans text-gray-800">
-      <Header />
+      <Header cartItemCount={getCartItemCount()} />
       <div className="p-4 sm:p-6 lg:p-8 rounded-lg shadow-lg">
 
       {/* Message Display */}
       {message && (
-        <div className="mb-4 p-4 bg-blue-100 border border-blue-400 text-blue-700 rounded-lg">
+        <div className="mb-4 p-4 bg-blue-100 border border-blue-400 text-blue-700 rounded-lg" role="alert">
           {message}
         </div>
       )}
@@ -117,40 +126,57 @@ const App = () => {
         {/* Product List Section */}
         <section className="lg:col-span-2 bg-white p-6 rounded-lg shadow-md">
           <h2 className="text-2xl font-semibold mb-6 text-gray-700">Products</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-            {products.length === 0 ? (
-              <p className="col-span-full text-center text-gray-500">Loading products or no products available...</p>
-            ) : (
-              products.map((product) => (
-                <ProductCard key={product.id} product={product} addToCart={addToCart} />
-              ))
-            )}
-          </div>
+          {isLoadingProducts ? (
+            <div className="flex justify-center items-center py-8">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+              <span className="ml-2 text-gray-600">Loading products...</span>
+            </div>
+          ) : products.length === 0 ? (
+            <p className="text-center text-gray-500 py-8">No products available.</p>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+              {products.map((product) => (
+                <ProductCard 
+                  key={product.id} 
+                  product={product} 
+                  addToCart={addToCart}
+                  isAddingToCart={isAddingToCart}
+                />
+              ))}
+            </div>
+          )}
         </section>
 
         {/* Shopping Cart Section */}
         <aside className="lg:col-span-1 bg-white p-6 rounded-lg shadow-md h-fit sticky top-8">
           <h2 className="text-2xl font-semibold mb-6 text-gray-700">Shopping Cart</h2>
-          {cart.length === 0 ? (
+          {isLoadingCart ? (
+            <div className="flex justify-center items-center py-8">
+              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-indigo-600"></div>
+              <span className="ml-2 text-gray-600">Loading cart...</span>
+            </div>
+          ) : cart.length === 0 ? (
             <p className="text-gray-500">Your cart is empty.</p>
           ) : (
             <>
               <ul>
                 {cart.map((item) => {
-                  // The cart items fetched from the backend will now include product details
-                  // so we don't necessarily need getProductDetails here if the backend sends it all
-                  // But keeping for consistency if backend structure changes or for simplicity if frontend wants to keep product details separate
                   const product = getProductDetails(item.productId);
-                  return (
-                    product && ( // Ensure product details are found before rendering
-                      <li key={item.cartItemId} className="flex justify-between items-center py-2 border-b border-gray-200 last:border-b-0">
-                        <div className="flex-1">
-                          <p className="font-medium text-gray-900">{item.name}</p> {/* Use item.name from fetched cart */}
-                          <p className="text-sm text-gray-600">Quantity: {item.quantity}</p>
-                        </div>
-                        <p className="font-semibold text-gray-800">${(item.price * item.quantity).toFixed(2)}</p> {/* Use item.price from fetched cart */}
+                  if (!product) {
+                    return (
+                      <li key={item.cartItemId} className="py-2 border-b border-gray-200 last:border-b-0">
+                        <p className="text-red-600 text-sm">Product no longer available</p>
                       </li>
-                    )
+                    );
+                  }
+                  return (
+                    <li key={item.cartItemId} className="flex justify-between items-center py-2 border-b border-gray-200 last:border-b-0">
+                      <div className="flex-1">
+                        <p className="font-medium text-gray-900">{product.name}</p>
+                        <p className="text-sm text-gray-600">Quantity: {item.quantity}</p>
+                      </div>
+                      <p className="font-semibold text-gray-800">${(product.price * item.quantity).toFixed(2)}</p>
+                    </li>
                   );
                 })}
               </ul>
@@ -159,8 +185,10 @@ const App = () => {
                 <span className="text-xl font-extrabold text-indigo-700">${calculateCartTotal().toFixed(2)}</span>
               </div>
               <button
-                className="mt-6 w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-1"
-                onClick={() => alert('Proceeding to checkout! (Not implemented in demo)')} // Simple alert for demo
+                className="mt-6 w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed"
+                onClick={() => alert('Proceeding to checkout! (Not implemented in demo)')}
+                disabled={cart.length === 0}
+                aria-label="Proceed to checkout"
               >
                 Proceed to Checkout
               </button>
@@ -172,10 +200,6 @@ const App = () => {
       {/* Footer */}
       <footer className="mt-8 text-center text-gray-600 text-sm">
         <p>&copy; Mythril Merch {new Date().getFullYear()}. All rights reserved.</p>
-        {/* Secret goes here */}
-        {/* <p>It's dangerous to go alone. Take <button className="inline-flex items-center bg-transparent border-none p-0 cursor-pointer hover:opacity-80">
-          <img src="/Its-Dangerous-to-Go-Alone-Take-This.png" alt="secret zelda heart" className="inline-block w-6 h-6" />
-        </button> this.</p> */}
       </footer>
       </div>
     </div>
@@ -183,14 +207,23 @@ const App = () => {
 };
 
 // ProductCard component for displaying individual product details
-const ProductCard = ({ product, addToCart }) => {
+const ProductCard = ({ product, addToCart, isAddingToCart }) => {
+  const handleAddToCart = () => {
+    if (!isAddingToCart) {
+      addToCart(product.id);
+    }
+  };
+
   return (
     <div className="bg-white border border-gray-200 rounded-xl shadow-md overflow-hidden transition-transform duration-300 ease-in-out hover:scale-105 flex flex-col">
       <img
         src={product.imageUrl}
         alt={product.name}
         className="w-full h-48 object-cover object-center"
-        onError={(e) => { e.target.onerror = null; e.target.src="https://placehold.co/150x150/CCCCCC/000000?text=No+Image"; }}
+        onError={(e) => { 
+          e.target.onerror = null; 
+          e.target.src="https://via.placeholder.com/300x200/CCCCCC/666666?text=No+Image"; 
+        }}
       />
       <div className="p-5 flex-grow flex flex-col justify-between">
         <div>
@@ -200,10 +233,12 @@ const ProductCard = ({ product, addToCart }) => {
         <div className="flex justify-between items-center mt-auto pt-4 border-t border-gray-100">
           <span className="text-2xl font-bold text-indigo-600">${product.price.toFixed(2)}</span>
           <button
-            onClick={() => addToCart(product.id)}
-            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:-translate-y-0.5"
+            onClick={handleAddToCart}
+            disabled={isAddingToCart}
+            className="bg-blue-500 hover:bg-blue-600 disabled:bg-blue-300 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:-translate-y-0.5 disabled:cursor-not-allowed"
+            aria-label={`Add ${product.name} to cart`}
           >
-            Add to Cart
+            {isAddingToCart ? 'Adding...' : 'Add to Cart'}
           </button>
         </div>
       </div>

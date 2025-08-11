@@ -1,39 +1,60 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-function Header() {
+function Header({ cartItemCount = 0 }) {
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      // For now, just log the search query
+      // In a real app, this would trigger a search API call
+      console.log('Searching for:', searchQuery);
+      alert(`Searching for: ${searchQuery} (Search functionality not implemented in demo)`);
+    }
+  };
+
   return (
     <header className="bg-amazonBlue text-white p-4 flex items-center justify-between">
       {/* Logo */}
       <div className="flex items-center">
         <img
-          src="https://pngimg.com/uploads/amazon/amazon_PNG11.png" // Amazon logo
+          src="https://pngimg.com/uploads/amazon/amazon_PNG11.png"
           alt="Amazon Logo"
           className="w-24 cursor-pointer mt-2"
         />
       </div>
 
       {/* Search Bar */}
-      <div className="flex-grow flex items-center bg-yellow-400 hover:bg-yellow-500 rounded-md mx-4">
+      <form onSubmit={handleSearch} className="flex-grow flex items-center bg-yellow-400 hover:bg-yellow-500 rounded-md mx-4">
         <input
           type="text"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
           className="p-2 h-full flex-grow rounded-l-md focus:outline-none px-4 text-black"
           placeholder="Search Amazon"
+          aria-label="Search products"
         />
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-10 w-10 p-2 cursor-pointer text-gray-800"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
+        <button
+          type="submit"
+          className="h-full p-2 cursor-pointer text-gray-800 hover:bg-yellow-600 rounded-r-md"
+          aria-label="Search"
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-          />
-        </svg>
-      </div>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            />
+          </svg>
+        </button>
+      </form>
 
       {/* Right Section - Links */}
       <div className="flex items-center space-x-6 whitespace-nowrap">
@@ -62,9 +83,11 @@ function Header() {
               d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.182 1.769.704 1.769H19m-9 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"
             />
           </svg>
-          <span className="absolute top-0 right-0 md:right-10 h-4 w-4 bg-yellow-400 text-center rounded-full text-black font-bold">
-            0
-          </span>
+          {cartItemCount > 0 && (
+            <span className="absolute top-0 right-0 md:right-10 h-4 w-4 bg-yellow-400 text-center rounded-full text-black font-bold text-xs flex items-center justify-center">
+              {cartItemCount > 99 ? '99+' : cartItemCount}
+            </span>
+          )}
           <p className="hidden md:inline font-bold text-sm mt-2">Cart</p>
         </div>
       </div>

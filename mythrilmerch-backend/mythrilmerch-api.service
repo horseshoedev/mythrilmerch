@@ -1,0 +1,50 @@
+[Unit]
+Description=MythrilMerch API Server
+After=network.target postgresql.service
+Wants=postgresql.service
+
+[Service]
+Type=notify
+User=mythrilmerch
+Group=mythrilmerch
+WorkingDirectory=/opt/mythrilmerch-backend
+Environment=PATH=/opt/mythrilmerch-backend/venv/bin
+Environment=DB_HOST=localhost
+Environment=DB_NAME=ecommerce_db
+Environment=DB_USER=ecommerce_user
+Environment=DB_PASSWORD=your_strong_password_here
+Environment=FLASK_DEBUG=0
+Environment=FLASK_ENV=production
+Environment=USE_SSL=1
+Environment=SSL_CERT_FILE=/etc/ssl/certs/mythrilmerch.crt
+Environment=SSL_KEY_FILE=/etc/ssl/private/mythrilmerch.key
+Environment=RATE_LIMIT_PER_MINUTE=60
+Environment=RATE_LIMIT_PER_HOUR=1000
+Environment=RATE_LIMIT_PER_DAY=10000
+Environment=GUNICORN_BIND=0.0.0.0:443
+Environment=GUNICORN_WORKERS=4
+Environment=GUNICORN_LOG_LEVEL=info
+Environment=GUNICORN_ACCESS_LOG=/var/log/mythrilmerch/access.log
+Environment=GUNICORN_ERROR_LOG=/var/log/mythrilmerch/error.log
+Environment=GUNICORN_PID_FILE=/var/run/mythrilmerch/gunicorn.pid
+
+ExecStart=/opt/mythrilmerch-backend/venv/bin/gunicorn --config gunicorn.conf.py app:app
+ExecReload=/bin/kill -s HUP $MAINPID
+KillMode=mixed
+TimeoutStopSec=5
+PrivateTmp=true
+Restart=always
+RestartSec=10
+
+# Security settings
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/log/mythrilmerch /var/run/mythrilmerch
+PrivateDevices=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+
+[Install]
+WantedBy=multi-user.target 
