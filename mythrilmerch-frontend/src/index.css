@@ -1,10 +1,59 @@
 /* src/index.css */
+
+/* Import custom fonts */
+@import url('https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&display=swap');
+
+/* NCL BasefighDemo Font - You'll need to add this font file to your project */
+@font-face {
+  font-family: 'NCL BasefighDemo';
+  src: url('./fonts/NCL Basefigh Demo.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Custom CSS variables for fonts */
+:root {
+  --font-logo: 'NCL BasefighDemo', serif;
+  --font-text: 'IM Fell English', serif;
+}
+
+@layer base {
+  /* Apply IM Fell English to body text */
+  body {
+    font-family: var(--font-text);
+  }
+  
+  /* Apply NCL BasefighDemo to headings */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-logo);
+  }
+  
+  /* Apply IM Fell English to paragraphs and general text */
+  p, span, div, a, button, input, textarea, select {
+    font-family: var(--font-text);
+  }
+}
+
 @layer components {
   .link {
     @apply relative cursor-pointer hover:underline;
+    font-family: var(--font-text);
+  }
+  
+  .logo-text {
+    font-family: var(--font-logo);
+  }
+  
+  .header-text {
+    font-family: var(--font-logo);
+  }
+  
+  .body-text {
+    font-family: var(--font-text);
   }
 }

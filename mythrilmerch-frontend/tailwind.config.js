@@ -6,6 +6,11 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        'logo': ['NCL BasefighDemo', 'serif'],
+        'text': ['IM Fell English', 'serif'],
+        'sans': ['IM Fell English', 'serif'], // Override default sans
+      },
       colors: {
         amazonBlue: '#131921', // Example: Header background
         amazonOrange: '#FF9900', // Example: Button color
@@ -18,10 +23,6 @@ module.exports = {
           800: '#333333',
         },
         // Add other specific Amazon colors
-      },
-      fontFamily: {
-        // Amazon primarily uses a system font stack, but you might define a generic sans-serif or a specific one if you want to be precise.
-        sans: ['Arial', 'sans-serif'], // Or 'Amazon Ember', if you have access and want to mimic it closely.
       },
       spacing: {
         // If Amazon uses very specific, non-standard spacing, define them here.

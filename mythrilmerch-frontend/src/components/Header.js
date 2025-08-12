@@ -17,11 +17,9 @@ function Header({ cartItemCount = 0 }) {
     <header className="bg-amazonBlue text-white p-4 flex items-center justify-between">
       {/* Logo */}
       <div className="flex items-center">
-        <img
-          src="https://pngimg.com/uploads/amazon/amazon_PNG11.png"
-          alt="Amazon Logo"
-          className="w-24 cursor-pointer mt-2"
-        />
+        <div className="text-white cursor-pointer mt-2">
+          <h1 className="text-2xl font-logo">Mythril Merch</h1>
+        </div>
       </div>
 
       {/* Search Bar */}
@@ -30,8 +28,8 @@ function Header({ cartItemCount = 0 }) {
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="p-2 h-full flex-grow rounded-l-md focus:outline-none px-4 text-black"
-          placeholder="Search Amazon"
+          className="p-2 h-full flex-grow rounded-l-md focus:outline-none px-4 text-black font-text"
+          placeholder="Search products..."
           aria-label="Search products"
         />
         <button
@@ -58,12 +56,12 @@ function Header({ cartItemCount = 0 }) {
 
       {/* Right Section - Links */}
       <div className="flex items-center space-x-6 whitespace-nowrap">
-        <div className="link">
+        <div className="link font-text">
           <p className="text-xs">Hello, Sign In</p>
           <p className="font-bold text-sm">Accounts & Lists</p>
         </div>
 
-        <div className="link">
+        <div className="link font-text">
           <p className="text-xs">Returns</p>
           <p className="font-bold text-sm">& Orders</p>
         </div>
@@ -84,11 +82,11 @@ function Header({ cartItemCount = 0 }) {
             />
           </svg>
           {cartItemCount > 0 && (
-            <span className="absolute top-0 right-0 md:right-10 h-4 w-4 bg-yellow-400 text-center rounded-full text-black font-bold text-xs flex items-center justify-center">
+            <span className="absolute top-0 right-0 md:right-10 h-4 w-4 bg-yellow-400 text-center rounded-full text-black font-bold text-xs flex items-center justify-center font-text">
               {cartItemCount > 99 ? '99+' : cartItemCount}
             </span>
           )}
-          <p className="hidden md:inline font-bold text-sm mt-2">Cart</p>
+          <p className="hidden md:inline font-bold text-sm mt-2 font-text">Cart</p>
         </div>
       </div>
     </header>
