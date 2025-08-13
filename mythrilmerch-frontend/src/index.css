@@ -26,11 +26,15 @@
   /* Apply IM Fell English to body text */
   body {
     font-family: var(--font-text);
+    /* Example of applying a new background color */
+    @apply bg-primary-black text-light-gray;
   }
   
   /* Apply NCL BasefighDemo to headings */
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-logo);
+    /* Example of applying a new heading text color */
+    @apply text-light-gray;
   }
   
   /* Apply IM Fell English to paragraphs and general text */
@@ -41,7 +45,7 @@
 
 @layer components {
   .link {
-    @apply relative cursor-pointer hover:underline;
+    @apply relative cursor-pointer hover:underline text-light-gray hover:text-accent-red;
     font-family: var(--font-text);
   }
   

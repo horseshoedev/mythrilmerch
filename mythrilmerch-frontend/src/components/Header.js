@@ -14,27 +14,27 @@ function Header({ cartItemCount = 0 }) {
   };
 
   return (
-    <header className="bg-amazonBlue text-white p-4 flex items-center justify-between">
+    <header className="bg-primary-black text-button-text p-4 flex items-center justify-between">
       {/* Logo */}
       <div className="flex items-center">
-        <div className="text-white cursor-pointer mt-2">
+        <div className="text-accent-red cursor-pointer mt-2">
           <h1 className="text-2xl font-logo">Mythril Merch</h1>
         </div>
       </div>
 
       {/* Search Bar */}
-      <form onSubmit={handleSearch} className="flex-grow flex items-center bg-yellow-400 hover:bg-yellow-500 rounded-md mx-4">
+      <form onSubmit={handleSearch} className="flex-grow flex items-center bg-secondary-black hover:bg-gray-text rounded-md mx-4">
         <input
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="p-2 h-full flex-grow rounded-l-md focus:outline-none px-4 text-black font-text"
+          className="p-2 h-full flex-grow rounded-l-md focus:outline-none px-4 text-light-gray font-text"
           placeholder="Search products..."
           aria-label="Search products"
         />
         <button
           type="submit"
-          className="h-full p-2 cursor-pointer text-gray-800 hover:bg-yellow-600 rounded-r-md"
+          className="h-full p-2 cursor-pointer text-light-gray hover:bg-hover-red rounded-r-md"
           aria-label="Search"
         >
           <svg
@@ -82,7 +82,7 @@ function Header({ cartItemCount = 0 }) {
             />
           </svg>
           {cartItemCount > 0 && (
-            <span className="absolute top-0 right-0 md:right-10 h-4 w-4 bg-yellow-400 text-center rounded-full text-black font-bold text-xs flex items-center justify-center font-text">
+            <span className="absolute top-0 right-0 md:right-10 h-4 w-4 bg-accent-red text-center rounded-full text-button-text font-bold text-xs flex items-center justify-center font-text">
               {cartItemCount > 99 ? '99+' : cartItemCount}
             </span>
           )}

@@ -111,28 +111,28 @@ const App = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 font-text text-gray-800">
+    <div className="min-h-screen bg-primary-black font-text text-light-gray">
       <Header cartItemCount={getCartItemCount()} />
       <div className="p-4 sm:p-6 lg:p-8 rounded-lg shadow-lg">
 
       {/* Message Display */}
       {message && (
-        <div className="mb-4 p-4 bg-blue-100 border border-blue-400 text-blue-700 rounded-lg font-text" role="alert">
+        <div className="mb-4 p-4 bg-accent-red/20 border border-accent-red text-light-gray rounded-lg font-text" role="alert">
           {message}
         </div>
       )}
 
       <main className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Product List Section */}
-        <section className="lg:col-span-2 bg-white p-6 rounded-lg shadow-md">
-          <h2 className="text-2xl font-semibold mb-6 text-gray-700 font-logo">Products</h2>
+        <section className="lg:col-span-2 bg-secondary-black p-6 rounded-lg shadow-md">
+          <h2 className="text-2xl font-semibold mb-6 text-light-gray font-logo">Products</h2>
           {isLoadingProducts ? (
             <div className="flex justify-center items-center py-8">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
-              <span className="ml-2 text-gray-600 font-text">Loading products...</span>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-accent-red"></div>
+              <span className="ml-2 text-gray-text font-text">Loading products...</span>
             </div>
           ) : products.length === 0 ? (
-            <p className="text-center text-gray-500 py-8 font-text">No products available.</p>
+            <p className="text-center text-gray-text py-8 font-text">No products available.</p>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
               {products.map((product) => (
@@ -148,15 +148,15 @@ const App = () => {
         </section>
 
         {/* Shopping Cart Section */}
-        <aside className="lg:col-span-1 bg-white p-6 rounded-lg shadow-md h-fit sticky top-8">
-          <h2 className="text-2xl font-semibold mb-6 text-gray-700 font-logo">Shopping Cart</h2>
+        <aside className="lg:col-span-1 bg-secondary-black p-6 rounded-lg shadow-md h-fit sticky top-8">
+          <h2 className="text-2xl font-semibold mb-6 text-light-gray font-logo">Shopping Cart</h2>
           {isLoadingCart ? (
             <div className="flex justify-center items-center py-8">
-              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-indigo-600"></div>
-              <span className="ml-2 text-gray-600 font-text">Loading cart...</span>
+              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-accent-red"></div>
+              <span className="ml-2 text-gray-text font-text">Loading cart...</span>
             </div>
           ) : cart.length === 0 ? (
-            <p className="text-gray-500 font-text">Your cart is empty.</p>
+            <p className="text-gray-text font-text">Your cart is empty.</p>
           ) : (
             <>
               <ul>
@@ -164,28 +164,28 @@ const App = () => {
                   const product = getProductDetails(item.productId);
                   if (!product) {
                     return (
-                      <li key={item.cartItemId} className="py-2 border-b border-gray-200 last:border-b-0">
+                      <li key={item.cartItemId} className="py-2 border-b border-gray-text last:border-b-0">
                         <p className="text-red-600 text-sm font-text">Product no longer available</p>
                       </li>
                     );
                   }
                   return (
-                    <li key={item.cartItemId} className="flex justify-between items-center py-2 border-b border-gray-200 last:border-b-0">
+                    <li key={item.cartItemId} className="flex justify-between items-center py-2 border-b border-gray-text last:border-b-0">
                       <div className="flex-1">
-                        <p className="font-medium text-gray-900 font-text">{product.name}</p>
-                        <p className="text-sm text-gray-600 font-text">Quantity: {item.quantity}</p>
+                        <p className="font-medium text-light-gray font-text">{product.name}</p>
+                        <p className="text-sm text-gray-text font-text">Quantity: {item.quantity}</p>
                       </div>
-                      <p className="font-semibold text-gray-800 font-text">${(product.price * item.quantity).toFixed(2)}</p>
+                      <p className="font-semibold text-light-gray font-text">${(product.price * item.quantity).toFixed(2)}</p>
                     </li>
                   );
                 })}
               </ul>
-              <div className="mt-6 pt-4 border-t-2 border-gray-300 flex justify-between items-center">
-                <span className="text-lg font-bold text-gray-800 font-text">Total:</span>
-                <span className="text-xl font-extrabold text-indigo-700 font-text">${calculateCartTotal().toFixed(2)}</span>
+              <div className="mt-6 pt-4 border-t-2 border-gray-text flex justify-between items-center">
+                <span className="text-lg font-bold text-light-gray font-text">Total:</span>
+                <span className="text-xl font-extrabold text-accent-red font-text">${calculateCartTotal().toFixed(2)}</span>
               </div>
               <button
-                className="mt-6 w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed font-text"
+                className="mt-6 w-full bg-button-bg hover:bg-hover-red text-button-text font-bold py-3 px-6 rounded-xl shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed font-text"
                 onClick={() => alert('Proceeding to checkout! (Not implemented in demo)')}
                 disabled={cart.length === 0}
                 aria-label="Proceed to checkout"
@@ -198,7 +198,7 @@ const App = () => {
       </main>
 
       {/* Footer */}
-      <footer className="mt-8 text-center text-gray-600 text-sm font-text">
+      <footer className="mt-8 text-center text-gray-text text-sm font-text">
         <p>&copy; Mythril Merch {new Date().getFullYear()}. All rights reserved.</p>
       </footer>
       </div>
@@ -215,7 +215,7 @@ const ProductCard = ({ product, addToCart, isAddingToCart }) => {
   };
 
   return (
-    <div className="bg-white border border-gray-200 rounded-xl shadow-md overflow-hidden transition-transform duration-300 ease-in-out hover:scale-105 flex flex-col">
+    <div className="bg-secondary-black border border-gray-text rounded-xl shadow-md overflow-hidden transition-transform duration-300 ease-in-out hover:scale-105 flex flex-col">
       <img
         src={product.imageUrl}
         alt={product.name}
@@ -227,15 +227,15 @@ const ProductCard = ({ product, addToCart, isAddingToCart }) => {
       />
       <div className="p-5 flex-grow flex flex-col justify-between">
         <div>
-          <h3 className="text-xl font-semibold text-gray-900 mb-2 font-logo">{product.name}</h3>
-          <p className="text-gray-600 text-sm mb-4 line-clamp-3 font-text">{product.description}</p>
+          <h3 className="text-xl font-semibold text-light-gray mb-2 font-logo">{product.name}</h3>
+          <p className="text-gray-text text-sm mb-4 line-clamp-3 font-text">{product.description}</p>
         </div>
-        <div className="flex justify-between items-center mt-auto pt-4 border-t border-gray-100">
-          <span className="text-2xl font-bold text-indigo-600 font-text">${product.price.toFixed(2)}</span>
+        <div className="flex justify-between items-center mt-auto pt-4 border-t border-gray-text">
+          <span className="text-2xl font-bold text-accent-red font-text">${product.price.toFixed(2)}</span>
           <button
             onClick={handleAddToCart}
             disabled={isAddingToCart}
-            className="bg-blue-500 hover:bg-blue-600 disabled:bg-blue-300 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:-translate-y-0.5 disabled:cursor-not-allowed font-text"
+            className="bg-accent-red hover:bg-hover-red disabled:bg-hover-red/50 text-button-text font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:-translate-y-0.5 disabled:cursor-not-allowed font-text"
             aria-label={`Add ${product.name} to cart`}
           >
             {isAddingToCart ? 'Adding...' : 'Add to Cart'}
